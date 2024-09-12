@@ -13,9 +13,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\cruci\\GitHub\\password-manager\\PassworManager.csproj",
-      "projectName": "PassworManager",
-      "projectPath": "C:\\Users\\cruci\\GitHub\\password-manager\\PassworManager.csproj",
+      "projectUniqueName": "C:\\Users\\cruci\\GitHub\\password-manager\\PasswordManager.csproj",
+      "projectName": "PasswordManager",
+      "projectPath": "C:\\Users\\cruci\\GitHub\\password-manager\\PasswordManager.csproj",
       "packagesPath": "C:\\Users\\cruci\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\cruci\\GitHub\\password-manager\\obj\\",
       "projectStyle": "PackageReference",

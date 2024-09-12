@@ -5,17 +5,17 @@ namespace password_manager
   public class Password
   {
     private string login {get; init;}
-    private string password {get; init;}
+    private string passwordValue {get; init;}0
 
     public Password(string login, string password)
     {
       this.login = login;
-      this.password = password;
+      this.passwordValue = password;
     }
 
     public void print()
     {
-      Console.WriteLine("Login: '" + login + "' Password: " + password);
+      Console.WriteLine("Login: '" + login + "'  Password: " + passwordValue);
     }
   }
 }

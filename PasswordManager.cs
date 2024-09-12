@@ -29,6 +29,21 @@ namespace password_manager
         }
       }
     }
-    // some code lmao
+    
+    public void SavePassword(Password password)
+    {
+      string passwordHash = BCrypt.Net.BCrypt.HashPassword(password.passwordValue);
+      using (var connection = new SQLiteConnection(connectionString))
+      {
+        connection.Open();
+        string insertQuery = "INSERT INTO Passwords (Login, PasswordHash) VALUES (@login, @passwordHash)";
+        using (var command = new SQLiteCommand(insertQuery, connection))
+        {
+          command.Parameters.AddWithValue("@login", password.login);
+          command.Parameters.AddWithValue("@passwordHash", passwordHash);
+          command.ExecuteNonQuery();
+        }
+      }
+    } 
   }
 }

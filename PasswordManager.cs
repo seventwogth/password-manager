@@ -6,19 +6,19 @@ namespace password_manager
 {
   public class PasswordManager
   {
-    private readonly string connection;
+    private readonly string connectionString;
 
     public PasswordManager(string dbPath)
     {
-      connection = $"Data source ={dbPath}, version = 3;";
+      connectionString = $"Data source ={dbPath}, version = 3;";
       InitializeDatabase();
     }
 
     private void InitializeDatabase()
     {
-      using (var connect = new SQLiteConnection(connection))
+      using (var connection = new SQLiteConnection(connectionString))
       {
-        connections.Open()
+        connection.Open();
         string createTableQuery = @"CREATE TABLE IF NOT EXISTS Passwords (
         Id INTEGER PRIMARY KEY AUTOINCREMENT,
         Login TEXT NOT NULL UNIQUE,

@@ -10,7 +10,7 @@ namespace password_manager
 
     public PasswordManager(string dbPath)
     {
-      connectionString = $"Data source ={dbPath}, version = 3;";
+      connectionString = $"Data Source={dbPath};Version=3;";
       InitializeDatabase();
     }
 

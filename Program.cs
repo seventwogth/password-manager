@@ -1,8 +1,20 @@
 using System;
 using password_manager;
 
-Password password = new Password("John", "66H@713_00hJK");
+class Program
+{
+  static void Main(string[] args)
+  {
+    var manager = new PasswordManager("passwords.db");
 
-password.print();
+    var password_1 = new Password("John@gmail.com", "1234567_");
+    manager.SavePassword(password_1);
 
-Console.ReadLine();
+    var password_2 = new Password("Asd@apple.com", "timcooksucks");
+    manager.SavePassword(password_2);
+
+    Console.WriteLine("Finished!");
+
+    Console.ReadLine();
+  }
+}

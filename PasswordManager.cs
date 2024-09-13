@@ -32,14 +32,14 @@ namespace password_manager
     
     public void SavePassword(Password password)
     {
-      string passwordHash = BCrypt.Net.BCrypt.HashPassword(password.passwordValue);
+      string passwordHash = BCrypt.Net.BCrypt.HashPassword(password.PasswordValue);
       using (var connection = new SQLiteConnection(connectionString))
       {
         connection.Open();
         string insertQuery = "INSERT INTO Passwords (Login, PasswordHash) VALUES (@login, @passwordHash)";
         using (var command = new SQLiteCommand(insertQuery, connection))
         {
-          command.Parameters.AddWithValue("@login", password.login);
+          command.Parameters.AddWithValue("@login", password.Login);
           command.Parameters.AddWithValue("@passwordHash", passwordHash);
           command.ExecuteNonQuery();
         }
@@ -51,7 +51,7 @@ namespace password_manager
       using (var connection = new SQLiteConnection(connectionString))
       {
         connection.Open();
-        string selectQuery = "SELECT PasswordHash FROM Passwords WHERE login = @login";
+        string selectQuery = "SELECT PasswordHash FROM Passwords WHERE Login = @login";
         using (var command = new SQLiteCommand(selectQuery, connection))
         {
           command.Parameters.AddWithValue("@login", login);

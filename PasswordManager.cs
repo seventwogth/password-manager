@@ -1,6 +1,5 @@
 using System;
 using System.Data.SQLite;
-using BCrypt.Net;
 
 namespace password_manager
 {
@@ -32,7 +31,6 @@ namespace password_manager
     
     public void SavePassword(Password password)
     {
-      string passwordHash = BCrypt.Net.BCrypt.HashPassword(password.PasswordValue);
       using (var connection = new SQLiteConnection(connectionString))
       {
         connection.Open();
@@ -40,7 +38,7 @@ namespace password_manager
         using (var command = new SQLiteCommand(insertQuery, connection))
         {
           command.Parameters.AddWithValue("@login", password.Login);
-          command.Parameters.AddWithValue("@passwordHash", passwordHash);
+          command.Parameters.AddWithValue("@passwordHash", password.PasswordValue);
           command.ExecuteNonQuery();
         }
       }

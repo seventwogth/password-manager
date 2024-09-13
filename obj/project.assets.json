@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "net8.0": {
+      "AES/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/AES.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/AES.dll": {}
+        }
+      },
       "BCrypt.Net-Next/4.0.3": {
         "type": "package",
         "compile": {
@@ -406,6 +415,18 @@
     }
   },
   "libraries": {
+    "AES/1.0.0": {
+      "sha512": "+JTfIBnF7JS+eATTuAfs2EaL+iYgfL9QGIifrXwChZgMYEEaQ24CD9F6XEVjcD2KbYzSLDID0rfAhaA+TClv6w==",
+      "type": "package",
+      "path": "aes/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "aes.1.0.0.nupkg.sha512",
+        "aes.nuspec",
+        "lib/net8.0/AES.dll"
+      ]
+    },
     "BCrypt.Net-Next/4.0.3": {
       "sha512": "W+U9WvmZQgi5cX6FS5GDtDoPzUCV4LkBLkywq/kRZhuDwcbavOzcDAr3LXJFqHUi952Yj3LEYoWW0jbEUQChsA==",
       "type": "package",
@@ -1256,7 +1277,8 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "BCrypt.Net-Next >= 4.0.3",
-      "System.Data.SQLite >= 1.0.118"
+      "System.Data.SQLite >= 1.0.118",
+      "aes >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1310,6 +1332,10 @@
           "System.Data.SQLite": {
             "target": "Package",
             "version": "[1.0.118, )"
+          },
+          "aes": {
+            "target": "Package",
+            "version": "[1.0.0, )"
           }
         },
         "imports": [

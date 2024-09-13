@@ -1,5 +1,7 @@
 using System;
 using System.Data.SQLite;
+using System.Security.Cryptography;
+using System.IO;
 
 namespace password_manager
 {
@@ -58,14 +60,18 @@ namespace password_manager
             if (reader.Read())
             {
               string passwordHash = reader.GetString(0);
-              Password result = new Password(login, passwordHash);
-              string foundPassword = result.Decrypt();
+              string foundPassword = Decrypt(passwordHash);
               return "Password for login '" + login + "': " + foundPassword;
             }
           }
         }
       }
       return "Password not found!";
+    }
+
+    public void ChangePassword(string login, string newPassword)
+    {
+      string newPasswordHash = Encrypt(newPassword); 
     }
   }
 }

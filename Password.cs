@@ -11,16 +11,15 @@ namespace password_manager
     public string Login {get; init;}
     public string PasswordValue {get; init;}
 
-    private readonly string _secretKey;
+    private static readonly string _secretKey = "0000000000000052";
 
     public Password(string login, string password)
     {
       this.Login = login;
-      this.PasswordValue = password;
-      this._secretKey = "0000000000000052";
+      this.PasswordValue = password;      
     }
 
-    public string Encrypt()
+    public static string Encrypt(string password)
     {
       using (Aes aes = Aes.Create())
       {
@@ -36,7 +35,7 @@ namespace password_manager
           {
             using (StreamWriter sw = new StreamWriter(cs))
             {
-              sw.Write(PasswordValue);
+              sw.Write(password);
             }
           }
           return Convert.ToBase64String(ms.ToArray());
@@ -44,9 +43,9 @@ namespace password_manager
       }
     }
       
-    public string Decrypt()
+    public static string Decrypt(string cryptedPassword)
     {
-      byte[] fullCipher = Convert.FromBase64String(PasswordValue);
+      byte[] fullCipher = Convert.FromBase64String(cryptedPassword);
       using (Aes aes = Aes.Create())
       {
         aes.Key = Encoding.UTF8.GetBytes(_secretKey);

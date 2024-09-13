@@ -13,8 +13,8 @@ class Program
     var password_2 = new Password("Asd@apple.com", "timcooksucks");
     manager.SavePassword(password_2);
     
-    Password found = manager.FindPassword("Asd@apple.com");
-    found.print();
+    string found = manager.FindPassword("Asd@apple.com");
+    Console.WriteLine(found); 
 
     Console.WriteLine("Finished!");
 

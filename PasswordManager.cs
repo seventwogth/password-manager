@@ -44,6 +44,28 @@ namespace password_manager
           command.ExecuteNonQuery();
         }
       }
-    } 
+    }
+
+    public Password FindPassword(string login)
+    {
+      using (var connection = new SQLiteConnection(connectionString))
+      {
+        connection.Open();
+        string selectQuery = "SELECT PasswordHash FROM Passwords WHERE login = @login";
+        using (var command = new SQLiteCommand(selectQuery, connection))
+        {
+          command.Parameters.AddWithValue("@login", login);
+          using (var reader = command.ExecuteReader())
+          {
+            if (reader.Read())
+            {
+              string passwordHash = reader.GetString(0);
+              return new Password(login, passwordHash);
+            }
+          }
+        }
+      }
+      return null;
+    }
   }
 }

@@ -12,6 +12,9 @@ class Program
 
     var password_2 = new Password("Asd@apple.com", "timcooksucks");
     manager.SavePassword(password_2);
+    
+    Password found = manager.FindPassword("Asd@apple.com");
+    found.print();
 
     Console.WriteLine("Finished!");
 

@@ -38,13 +38,13 @@ namespace password_manager
         using (var command = new SQLiteCommand(insertQuery, connection))
         {
           command.Parameters.AddWithValue("@login", password.Login);
-          command.Parameters.AddWithValue("@passwordHash", password.PasswordValue);
+          command.Parameters.AddWithValue("@passwordHash", password.Encrypt());
           command.ExecuteNonQuery();
         }
       }
     }
 
-    public Password FindPassword(string login)
+    public string FindPassword(string login)
     {
       using (var connection = new SQLiteConnection(connectionString))
       {
@@ -58,12 +58,14 @@ namespace password_manager
             if (reader.Read())
             {
               string passwordHash = reader.GetString(0);
-              return new Password(login, passwordHash);
+              Password result = new Password(login, passwordHash);
+              string foundPassword = result.Decrypt();
+              return "Password for login '" + login + "': " + foundPassword;
             }
           }
         }
       }
-      return null;
+      return "Password not found!";
     }
   }
 }

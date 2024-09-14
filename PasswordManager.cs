@@ -34,12 +34,32 @@ namespace password_manager
       using (var connection = new SQLiteConnection(connectionString))
       {
         connection.Open();
-        string insertQuery = "INSERT INTO Passwords (Login, PasswordHash) VALUES (@login, @passwordHash)";
-        using (var command = new SQLiteCommand(insertQuery, connection))
+        string checkExistQuery = "SELECT COUNT(*) FROM Passwords WHERE Login = @login";
+        using (var checkCommand = new SQLiteCommand(checkExistQuery, connection))
         {
-          command.Parameters.AddWithValue("@login", password.Login);
-          command.Parameters.AddWithValue("@passwordHash", password.Encrypt());
-          command.ExecuteNonQuery();
+          checkCommand.Parameters.AddWithValue("@login", password.Login);
+          long count = (long)checkCommand.ExecuteScalar();
+
+          if (count > 0)
+          {
+            string updateQuery = "UPDATE Passwords SET PasswordHash = @passwordHash WHERE Login = @login";
+            using (var updateCommand = new SQLiteCommand(updateQuery, connection))
+            {
+              updateCommand.Parameters.AddWithValue("@login", password.Login);
+              updateCommand.Parameters.AddWithValue("passwordHash", password.Encrypt());
+              updateCommand.ExecuteNonQuery();
+            }
+          }
+          else
+          {
+            string insertQuery = "INSERT INTO Passwords (Login, PasswordHash) VALUES (@login, @passwordHash)";
+            using (var command = new SQLiteCommand(insertQuery, connection))
+            {
+              command.Parameters.AddWithValue("@login", password.Login);
+              command.Parameters.AddWithValue("@passwordHash", password.Encrypt());
+              command.ExecuteNonQuery();
+            }
+          }
         }
       }
     }

@@ -15,93 +15,121 @@ namespace password_manager
 
     private void InitializeDatabase()
     {
-      using (var connection = new SQLiteConnection(connectionString))
+      try
       {
-        connection.Open();
-        string createTableQuery = @"CREATE TABLE IF NOT EXISTS Passwords (
-        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-        Login TEXT NOT NULL UNIQUE,
-        PasswordHash TEXT NOT NULL)";
-        using (var command = new SQLiteCommand(createTableQuery, connection))
+        using (var connection = new SQLiteConnection(connectionString))
         {
-          command.ExecuteNonQuery();
+          connection.Open();
+          string createTableQuery = @"CREATE TABLE IF NOT EXISTS Passwords (
+          Id INTEGER PRIMARY KEY AUTOINCREMENT,
+          Login TEXT NOT NULL UNIQUE,
+          PasswordHash TEXT NOT NULL)";
+          using (var command = new SQLiteCommand(createTableQuery, connection))
+          {
+            command.ExecuteNonQuery();
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        throw new DbException("Error occured initializing database.", ex); 
       }
     }
     
     public void SavePassword(Password password)
     {
-      using (var connection = new SQLiteConnection(connectionString))
+      try
       {
-        connection.Open();
-        string checkExistQuery = "SELECT COUNT(*) FROM Passwords WHERE Login = @login";
-        using (var checkCommand = new SQLiteCommand(checkExistQuery, connection))
+        using (var connection = new SQLiteConnection(connectionString))
         {
-          checkCommand.Parameters.AddWithValue("@login", password.Login);
-          long count = (long)checkCommand.ExecuteScalar();
+          connection.Open();
+          string checkExistQuery = "SELECT COUNT(*) FROM Passwords WHERE Login = @login";
+          using (var checkCommand = new SQLiteCommand(checkExistQuery, connection))
+          {
+            checkCommand.Parameters.AddWithValue("@login", password.Login);
+            long count = (long)checkCommand.ExecuteScalar();
 
-          if (count > 0)
-          {
-            string updateQuery = "UPDATE Passwords SET PasswordHash = @passwordHash WHERE Login = @login";
-            using (var updateCommand = new SQLiteCommand(updateQuery, connection))
+            if (count > 0)
             {
-              updateCommand.Parameters.AddWithValue("@login", password.Login);
-              updateCommand.Parameters.AddWithValue("passwordHash", password.Encrypt());
-              updateCommand.ExecuteNonQuery();
+              string updateQuery = "UPDATE Passwords SET PasswordHash = @passwordHash WHERE Login = @login";
+              using (var updateCommand = new SQLiteCommand(updateQuery, connection))
+              {
+                updateCommand.Parameters.AddWithValue("@login", password.Login);
+                updateCommand.Parameters.AddWithValue("passwordHash", password.Encrypt());
+                updateCommand.ExecuteNonQuery();
+              }
             }
-          }
-          else
-          {
-            string insertQuery = "INSERT INTO Passwords (Login, PasswordHash) VALUES (@login, @passwordHash)";
-            using (var command = new SQLiteCommand(insertQuery, connection))
+            else
             {
-              command.Parameters.AddWithValue("@login", password.Login);
-              command.Parameters.AddWithValue("@passwordHash", password.Encrypt());
-              command.ExecuteNonQuery();
+              string insertQuery = "INSERT INTO Passwords (Login, PasswordHash) VALUES (@login, @passwordHash)";
+              using (var command = new SQLiteCommand(insertQuery, connection))
+              {
+                command.Parameters.AddWithValue("@login", password.Login);
+                command.Parameters.AddWithValue("@passwordHash", password.Encrypt());
+                command.ExecuteNonQuery();
+              }
             }
           }
         }
+      }
+      catch (Exception ex)
+      {
+        throw new DbException("Error occured saving password.", ex); 
       }
     }
 
     public string FindPassword(string login)
     {
-      using (var connection = new SQLiteConnection(connectionString))
+      try
       {
-        connection.Open();
-        string selectQuery = "SELECT PasswordHash FROM Passwords WHERE Login = @login";
-        using (var command = new SQLiteCommand(selectQuery, connection))
+        using (var connection = new SQLiteConnection(connectionString))
         {
-          command.Parameters.AddWithValue("@login", login);
-          using (var reader = command.ExecuteReader())
+          connection.Open();
+          string selectQuery = "SELECT PasswordHash FROM Passwords WHERE Login = @login";
+          using (var command = new SQLiteCommand(selectQuery, connection))
           {
-            if (reader.Read())
+            command.Parameters.AddWithValue("@login", login);
+            using (var reader = command.ExecuteReader())
             {
-              string passwordHash = reader.GetString(0);
-              Password result = new Password(login, passwordHash);
-              string foundPassword = result.Decrypt();
-              return foundPassword;
+              if (reader.Read())
+              {
+                string passwordHash = reader.GetString(0);
+                Password result = new Password(login, passwordHash);
+                string foundPassword = result.Decrypt();
+                return foundPassword;
+              }
             }
           }
         }
+        return "Password not found!";
       }
-      return "Password not found!";
+      catch (Exception ex)
+      {
+        throw new DbException("Error occured finding password.", ex);
+      }
     }
 
     public void ChangePassword(string login, string newPassword)
     {
       Password password = new Password(login, newPassword);
       string newPasswordHash = password.Encrypt();
-      using (var connection = new SQLiteConnection(connectionString))
+      try
       {
-        connection.Open();
-        string updateQuery = "UPDATE Passwords SET PasswordHash = @passwordHash WHERE Login = @login";
-        using (var command = new SQLiteCommand(updateQuery, connection))
+        using (var connection = new SQLiteConnection(connectionString))
         {
-          command.Parameters.AddWithValue("@login", login);
-          command.Parameters.AddWithValue("@passwordHash", newPasswordHash);
-          command.ExecuteNonQuery();
+          connection.Open();
+          string updateQuery = "UPDATE Passwords SET PasswordHash = @passwordHash WHERE Login = @login";
+          using (var command = new SQLiteCommand(updateQuery, connection))
+          {
+            command.Parameters.AddWithValue("@login", login);
+            command.Parameters.AddWithValue("@passwordHash", newPasswordHash);
+            command.ExecuteNonQuery();
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        throw new DbException("Error occured changing password.", ex);
       }
     }
   }

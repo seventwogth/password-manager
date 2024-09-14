@@ -12,14 +12,20 @@ class Program
 
 //    var password_2 = new Password("Asd@apple.com", "timcooksucks");
 //    manager.SavePassword(password_2);
-    var password_3 = new Password("Maineman", "midwest2214");
-    manager.SavePassword(password_3);
+//    var password_3 = new Password("Maineman", "midwest2214");
+//    manager.SavePassword(password_3);
 
     string found = manager.FindPassword("Asd@apple.com");
     Console.WriteLine(found);
 
     string found2 = manager.FindPassword("Maineman");
     Console.WriteLine(found2);
+
+    manager.ChangePassword("Maineman", "Northeasternman");
+
+    string found3 = manager.FindPassword("Maineman");
+    Console.WriteLine(found3);
+
 
     Console.WriteLine("Finished!");
 

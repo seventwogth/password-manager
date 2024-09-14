@@ -60,12 +60,29 @@ namespace password_manager
               string passwordHash = reader.GetString(0);
               Password result = new Password(login, passwordHash);
               string foundPassword = result.Decrypt();
-              return "Password for login '" + login + "': " + foundPassword;
+              return foundPassword;
             }
           }
         }
       }
       return "Password not found!";
+    }
+
+    public void ChangePassword(string login, string newPassword)
+    {
+      Password password = new Password(login, newPassword);
+      string newPasswordHash = password.Encrypt();
+      using (var connection = new SQLiteConnection(connectionString))
+      {
+        connection.Open();
+        string updateQuery = "UPDATE Passwords SET PasswordHash = @passwordHash WHERE Login = @login";
+        using (var command = new SQLiteCommand(updateQuery, connection))
+        {
+          command.Parameters.AddWithValue("@login", login);
+          command.Parameters.AddWithValue("@passwordHash", newPasswordHash);
+          command.ExecuteNonQuery();
+        }
+      }
     }
   }
 }

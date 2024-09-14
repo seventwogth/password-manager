@@ -1,34 +1,132 @@
 using System;
-using password_manager;
 
-class Program
+namespace password_manager
 {
-  static void Main(string[] args)
-  {
-    var manager = new PasswordManager("passwords.db");
+    class Program
+    {
+        static void Main(string[] args)
+        {
+          //по задумке мастер-пароль вшит в код, так как пользователь получает его с копией программы
+          string masterPassword = "master";
+          PasswordManager passwordManager = new PasswordManager("passwords.db");
 
-//    var password_1 = new Password("John@gmail.com", "1234567_");
-//    manager.SavePassword(password_1);
+          Console.WriteLine("Enter master-password:");
+          string inputPassword = Console.ReadLine();
 
-//    var password_2 = new Password("Asd@apple.com", "timcooksucks");
-//    manager.SavePassword(password_2);
-//    var password_3 = new Password("Maineman", "midwest2214");
-//    manager.SavePassword(password_3);
+          if (inputPassword != masterPassword)
+          {
+            Console.WriteLine("Invalid master-password. Exiting the program...");
+            return;
+          }
 
-    string found = manager.FindPassword("Asd@apple.com");
-    Console.WriteLine(found);
+          bool running = true; //интерфейс меню
+          while (running)
+          {
+            Console.WriteLine("\nAvaliable options:");
+            Console.WriteLine("1 - Save new password");
+            Console.WriteLine("2 - Find existing password by login");
+            Console.WriteLine("3 - Change existing password by login");
+            Console.WriteLine("4 - Exit");
 
-    string found2 = manager.FindPassword("Maineman");
-    Console.WriteLine(found2);
+            string choice = Console.ReadLine();
 
-    manager.ChangePassword("Maineman", "181882$!_@GH");
+            switch (choice)
+            {
+              case "1":
+                SavePassword(passwordManager);
+                break;
+              case "2":
+                FindPassword(passwordManager);
+                break;
+              case "3":
+                ChangePassword(passwordManager);
+                break;
+              case "4":
+                running = false;
+                Console.WriteLine("Exiting the program...");
+                break;
+              default:
+                Console.WriteLine("Invalid option. Please choose an existing option.");
+                break;
+            }
+          }
+        }
+        //статические методы для связи с методами класса PasswordManager
+        private static void SavePassword(PasswordManager passwordManager)
+        {
+            Console.Write("Enter login: ");
+            string login = Console.ReadLine();
+            if (login != "" && login != null)
+            {
+              Console.Write("Enter password: ");
+              string password = Console.ReadLine();
+              if (password != "" && password != null)
+              {
+                try
+                {
+                    passwordManager.SavePassword(new Password(login, password));
+                    Console.WriteLine("Password saved successfully.");
+                }
+                catch (Exception ex)
+                {
+                  throw new DbException("Error occured saving password.", ex);
+                }
+              }
+            }
+            else
+            {
+              Console.WriteLine("Password or Login value can't be null!");
+            }
+        }
 
-    string found3 = manager.FindPassword("Maineman");
-    Console.WriteLine(found3);
+        private static void FindPassword(PasswordManager passwordManager)
+        {
+            Console.Write("Enter login: ");
+            string login = Console.ReadLine();
+            if (login != "" && login != null)
+            {
+              try
+              {
+                  string password = passwordManager.FindPassword(login);
+                  Console.WriteLine($"Password for the login '{login}': {password}");
+              }
+              catch (Exception ex)
+              {
+                throw new DbException("Error occured finding password.", ex);
+              }
+            }
+            else
+            {
+              Console.WriteLine("Login value can't be null!");
+            }
+        }
 
-
-    Console.WriteLine("Finished!");
-
-    Console.ReadLine();
-  }
+        private static void ChangePassword(PasswordManager passwordManager)
+        {
+            Console.Write("Enter login: ");
+            string login = Console.ReadLine();
+            if (login != "" && login != null)
+            {
+              Console.Write("Enter new password: ");
+              string newPassword = Console.ReadLine();
+              if (newPassword != "" && newPassword != null)
+              {
+                try
+                {
+                    passwordManager.ChangePassword(login, newPassword);
+                    Console.WriteLine("Password saved successfully.");
+                }
+                catch (Exception ex)
+                {
+                  throw new DbException("Error occured changing password.", ex);
+                }
+              }
+            }
+            else
+            {
+              Console.WriteLine("Password or Login value can't be null!");
+            }
+        }
+    }
 }
+

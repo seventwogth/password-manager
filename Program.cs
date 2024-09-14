@@ -21,7 +21,7 @@ class Program
     string found2 = manager.FindPassword("Maineman");
     Console.WriteLine(found2);
 
-    manager.ChangePassword("Maineman", "Northeasternman");
+    manager.ChangePassword("Maineman", "181882$!_@GH");
 
     string found3 = manager.FindPassword("Maineman");
     Console.WriteLine(found3);

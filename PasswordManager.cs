@@ -1,21 +1,23 @@
 using System;
 using System.Data.SQLite;
 
+//Класс объекта - менеджера паролей, содержащий всю основную логику
 namespace password_manager
 {
   public class PasswordManager
   {
-    private readonly string connectionString;
-
+    private readonly string connectionString; //информация о базе данных SQLite
+    
+    //конструктора по умолчанию не будет (опять)
     public PasswordManager(string dbPath)
     {
       connectionString = $"Data Source={dbPath};Version=3;";
       InitializeDatabase();
     }
 
-    private void InitializeDatabase()
+    private void InitializeDatabase() //инциализация SQLite БД
     {
-      try
+      try //присутствует обработка ошибок
       {
         using (var connection = new SQLiteConnection(connectionString))
         {
@@ -35,7 +37,9 @@ namespace password_manager
         throw new DbException("Error occured initializing database.", ex); 
       }
     }
-    
+    // метод сохранения пароля в базу данных.
+    // во избежание ошибок, при добавлении уже существующих значений они обновляются.
+    // так как параметр Login является уникальным, БД не даст добавить два одинаковых значения
     public void SavePassword(Password password)
     {
       try
@@ -49,7 +53,7 @@ namespace password_manager
             checkCommand.Parameters.AddWithValue("@login", password.Login);
             long count = (long)checkCommand.ExecuteScalar();
 
-            if (count > 0)
+            if (count > 0) //если значение уже присутствует в БД
             {
               string updateQuery = "UPDATE Passwords SET PasswordHash = @passwordHash WHERE Login = @login";
               using (var updateCommand = new SQLiteCommand(updateQuery, connection))
@@ -59,7 +63,7 @@ namespace password_manager
                 updateCommand.ExecuteNonQuery();
               }
             }
-            else
+            else //если значения нет в БД
             {
               string insertQuery = "INSERT INTO Passwords (Login, PasswordHash) VALUES (@login, @passwordHash)";
               using (var command = new SQLiteCommand(insertQuery, connection))
@@ -77,7 +81,7 @@ namespace password_manager
         throw new DbException("Error occured saving password.", ex); 
       }
     }
-
+    //метод поиска пароля по логину
     public string FindPassword(string login)
     {
       try
@@ -108,7 +112,9 @@ namespace password_manager
         throw new DbException("Error occured finding password.", ex);
       }
     }
-
+    //метод изменения пароля по логину
+    //отмечу, что для каждого логина может быть только одно значения пароля
+    //(параметр Login - уникальный в нашей БД)
     public void ChangePassword(string login, string newPassword)
     {
       Password password = new Password(login, newPassword);

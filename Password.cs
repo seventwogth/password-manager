@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-
+//Класс - хранилище для удобной работы со связанной парой данных "пароль/логин" 
 namespace password_manager 
 {
   public class Password
@@ -11,16 +11,18 @@ namespace password_manager
     public string Login {get; init;}
     public string PasswordValue {get; init;}
 
-    private readonly string _secretKey;
+    private readonly string _secretKey; //ключ для шифрования
+    
+    //конструктора по умолчанию не будет
 
     public Password(string login, string password)
     {
       this.Login = login;
       this.PasswordValue = password;
-      this._secretKey = "0000000000000052";
+      this._secretKey = "0000000000000052"; //для удобства каждый ключ будет одинаковым
     }
 
-    public string Encrypt()
+    public string Encrypt() // метод шифрования пароля для хранения в базе данных
     {
       using (Aes aes = Aes.Create())
       {
@@ -44,7 +46,7 @@ namespace password_manager
       }
     }
       
-    public string Decrypt()
+    public string Decrypt() //метод дешифрования пароля
     {
       byte[] fullCipher = Convert.FromBase64String(PasswordValue);
       using (Aes aes = Aes.Create())
@@ -74,7 +76,7 @@ namespace password_manager
       }
     }
 
-    public void print()
+    public void print() //метод вывода объекта
     {
       Console.WriteLine("Login: '" + Login + "'  Password: " + PasswordValue);
     }

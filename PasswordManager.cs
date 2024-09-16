@@ -50,7 +50,7 @@ namespace password_manager
           string checkExistQuery = "SELECT COUNT(*) FROM Passwords WHERE Login = @login";
           using (var checkCommand = new SQLiteCommand(checkExistQuery, connection))
           {
-            checkCommand.Parameters.AddWithValue("@login", password.Login);
+            checkCommand.Parameters.AddWithValue("@login", password.getLogin());
             long count = (long)checkCommand.ExecuteScalar();
 
             if (count > 0) //если значение уже присутствует в БД
@@ -58,7 +58,7 @@ namespace password_manager
               string updateQuery = "UPDATE Passwords SET PasswordHash = @passwordHash WHERE Login = @login";
               using (var updateCommand = new SQLiteCommand(updateQuery, connection))
               {
-                updateCommand.Parameters.AddWithValue("@login", password.Login);
+                updateCommand.Parameters.AddWithValue("@login", password.getLogin());
                 updateCommand.Parameters.AddWithValue("passwordHash", password.Encrypt());
                 updateCommand.ExecuteNonQuery();
               }
@@ -68,7 +68,7 @@ namespace password_manager
               string insertQuery = "INSERT INTO Passwords (Login, PasswordHash) VALUES (@login, @passwordHash)";
               using (var command = new SQLiteCommand(insertQuery, connection))
               {
-                command.Parameters.AddWithValue("@login", password.Login);
+                command.Parameters.AddWithValue("@login", password.getLogin());
                 command.Parameters.AddWithValue("@passwordHash", password.Encrypt());
                 command.ExecuteNonQuery();
               }

@@ -8,8 +8,8 @@ namespace password_manager
 {
   public class Password
   {
-    public string Login {get; init;}
-    public string PasswordValue {get; init;}
+    private string Login {get; init;}
+    private string PasswordValue {get; init;}
 
     private readonly string _secretKey; //ключ для шифрования
     
@@ -20,6 +20,11 @@ namespace password_manager
       this.Login = login;
       this.PasswordValue = password;
       this._secretKey = "0000000000000052"; //для удобства каждый ключ будет одинаковым
+    }
+    
+    public string getLogin()
+    {
+      return Login;
     }
 
     public string Encrypt() // метод шифрования пароля для хранения в базе данных

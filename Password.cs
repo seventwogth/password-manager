@@ -53,7 +53,7 @@ namespace password_manager
       
     public string Decrypt() //метод дешифрования пароля
     {
-      byte[] fullCipher = Convert.FromBase64String(PasswordValue);
+      var  fullCipher = Convert.FromBase64String(PasswordValue);
       using (Aes aes = Aes.Create())
       {
         aes.Key = Encoding.UTF8.GetBytes(_secretKey);
@@ -79,11 +79,6 @@ namespace password_manager
           }
         }
       }
-    }
-
-    public void print() //метод вывода объекта
-    {
-      Console.WriteLine("Login: '" + Login + "'  Password: " + PasswordValue);
     }
   }
 }

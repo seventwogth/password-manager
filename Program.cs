@@ -5,8 +5,9 @@ namespace password_manager
     class Program
     {
         static void Main(string[] args)
+        
         {
-          //по задумке мастер-пароль вшит в код, так как пользователь получает его с копией программы
+         // try{}
           string masterPassword = "master";
           PasswordManager passwordManager = new PasswordManager("passwords.db");
 
@@ -56,21 +57,18 @@ namespace password_manager
         {
             Console.Write("Enter login: ");
             string login = Console.ReadLine();
-            if (login != "" && login != null)
-            {
-              Console.Write("Enter password: ");
+            Console.Write("Enter password: ");
               string password = Console.ReadLine();
-              if (password != "" && password != null)
+            if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
+            {
+              try
               {
-                try
-                {
-                    passwordManager.SavePassword(new Password(login, password));
-                    Console.WriteLine("Password saved successfully.");
-                }
-                catch (Exception ex)
-                {
-                  throw new DbException("Error occured saving password.", ex);
-                }
+                  passwordManager.SavePassword(new Password(login, password));
+                  Console.WriteLine("Password saved successfully.");
+              }
+              catch (Exception ex)
+              {
+                throw new DbException("Error occured saving password.", ex);
               }
             }
             else
@@ -83,7 +81,7 @@ namespace password_manager
         {
             Console.Write("Enter login: ");
             string login = Console.ReadLine();
-            if (login != "" && login != null)
+            if (!string.IsNullOrEmpty(login))
             {
               try
               {
@@ -105,21 +103,18 @@ namespace password_manager
         {
             Console.Write("Enter login: ");
             string login = Console.ReadLine();
-            if (login != "" && login != null)
+            Console.Write("Enter password: ");
+            string newPassword = Console.ReadLine();
+            if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(newPassword))
             {
-              Console.Write("Enter new password: ");
-              string newPassword = Console.ReadLine();
-              if (newPassword != "" && newPassword != null)
+              try
               {
-                try
-                {
-                    passwordManager.ChangePassword(login, newPassword);
-                    Console.WriteLine("Password saved successfully.");
-                }
-                catch (Exception ex)
-                {
-                  throw new DbException("Error occured changing password.", ex);
-                }
+                  passwordManager.ChangePassword(login, newPassword);
+                  Console.WriteLine("Password saved successfully.");
+              }
+              catch (Exception ex)
+              {
+                throw new DbException("Error occured changing password.", ex);
               }
             }
             else

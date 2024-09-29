@@ -2,6 +2,7 @@ using System;
 using System.Data.SQLite;
 using PManager.Cryptography;
 using PManager.Data;
+
 //Класс объекта - менеджера паролей, содержащий всю основную логику
 namespace PManager.Core
 {

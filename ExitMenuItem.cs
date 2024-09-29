@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace password_manager
+namespace PManager.Core
 {
   public class ExitMenuItem : MenuItem
   {

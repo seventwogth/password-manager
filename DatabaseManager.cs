@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using System.Data.SQLite;
 
-namespace password_manager
+namespace PManager.Data
 {
   public class DatabaseManager
   {

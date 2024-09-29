@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace password_manager
+namespace PManager.Core
 {
   public class AppManager
   {

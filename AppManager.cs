@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace password_manager
 {
@@ -8,7 +9,7 @@ namespace password_manager
     private readonly PasswordManager _passwordManager;
     private readonly string _masterPassword;
     private bool _running;
-    private readonly Dictionary<string, Action> _menuActions;
+    private readonly Dictionary<string, Func<Task>> _menuActions;
 
     public AppManager(PasswordManager passwordManager, string masterPassword)
     {
@@ -16,16 +17,16 @@ namespace password_manager
       _masterPassword = masterPassword;
       _running = false;
 
-      _menuActions = new Dictionary<string, Action>
+      _menuActions = new Dictionary<string, Func<Task>>
       {
-        { "1", SavePassword },
-        { "2", FindPassword },
-        { "3", ChangePassword },
-        { "4", Exit }
+        { "1", SavePasswordAsync },
+        { "2", FindPasswordAsync },
+        { "3", ChangePasswordAsync },
+        { "4", ExitAsync }
       };
     }
 
-    public void Start()
+    public async Task StartAsync()
     {
       Console.WriteLine("Please insert master-password:");
       string response = Console.ReadLine();
@@ -40,7 +41,7 @@ namespace password_manager
 
           if (!string.IsNullOrEmpty(choice) && _menuActions.ContainsKey(choice))
           {
-            _menuActions[choice].Invoke();
+            await _menuActions[choice]();
           }
           else
           {
@@ -64,7 +65,7 @@ namespace password_manager
       Console.WriteLine();
     }
 
-    private void SavePassword()
+    private async Task SavePasswordAsync()
     {
       Console.WriteLine("Enter login:");
       string login = Console.ReadLine();
@@ -75,7 +76,7 @@ namespace password_manager
 
       if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
       {
-      _passwordManager.SavePassword(login, password);
+      await _passwordManager.SavePasswordAsync(login, password);
       }
       else
       {
@@ -83,13 +84,13 @@ namespace password_manager
       }
     }
 
-    private void FindPassword()
+    private async Task FindPasswordAsync()
     {
       Console.WriteLine("Enter login:");
       string login = Console.ReadLine();
       if (!string.IsNullOrEmpty(login))
       {
-        string password = _passwordManager.FindPassword(login);
+        string password = await _passwordManager.FindPasswordAsync(login);
         if (password != null)
         {
           Console.WriteLine($"\nPassword for login {login}: {password}");
@@ -105,7 +106,7 @@ namespace password_manager
       }
     }
 
-    private void ChangePassword()
+    private async Task ChangePasswordAsync()
     {
       Console.WriteLine("Enter login:");
       string login = Console.ReadLine();
@@ -114,7 +115,7 @@ namespace password_manager
 
       if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(newPassword))
       {
-        _passwordManager.ChangePassword(login, newPassword);
+        await _passwordManager.ChangePasswordAsync(login, newPassword);
       }
       else
       {
@@ -122,10 +123,11 @@ namespace password_manager
       }
     }
 
-    private void Exit()
+    private Task ExitAsync()
     {
       _running = false;
       Console.WriteLine("Exiting...");
+      return Task.CompletedTask;
     }
   }
 }

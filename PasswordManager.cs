@@ -18,7 +18,7 @@ namespace password_manager
     // метод сохранения пароля в базу данных.
     // во избежание ошибок, при добавлении уже существующих значений они обновляются.
     // так как параметр Login является уникальным, БД не даст добавить два одинаковых значения
-    public void SavePassword(string login, string password)
+    public async Task SavePasswordAsync(string login, string password)
     {
       try
       {
@@ -27,9 +27,9 @@ namespace password_manager
         string checkExistQuery = "SELECT COUNT(*) FROM Passwords WHERE Login = @login";
         SQLiteParameter[] checkParams = { new SQLiteParameter("@login", login) };
 
-        using (var reader = _dbManager.ExecuteReader(checkExistQuery, checkParams))
+        using (var reader = await _dbManager.ExecuteReaderAsync(checkExistQuery, checkParams))
         {
-          if (reader.Read() && (long)reader[0] > 0)
+          if (await reader.ReadAsync() && (long)reader[0] > 0)
           {
             string updateQuery = "UPDATE Passwords SET PasswordHash = @passwordHash WHERE Login = @login";
             SQLiteParameter[] updateParams = 
@@ -37,7 +37,7 @@ namespace password_manager
               new SQLiteParameter("@login", login),
               new SQLiteParameter("@passwordHash", encryptedPassword)
             };
-            _dbManager.ExecuteQuery(updateQuery, updateParams);
+            await _dbManager.ExecuteQueryAsync(updateQuery, updateParams);
           }
           else
           {
@@ -47,7 +47,7 @@ namespace password_manager
               new SQLiteParameter("@login", login),
               new SQLiteParameter("@passwordHash", encryptedPassword)
             };
-            _dbManager.ExecuteQuery(insertQuery, insertParams);
+            await _dbManager.ExecuteQueryAsync(insertQuery, insertParams);
           }
         }
       }
@@ -57,16 +57,16 @@ namespace password_manager
       }
     }
     //метод поиска пароля по логину
-    public string FindPassword(string login)
+    public async Task<string> FindPasswordAsync(string login)
     {
       try
       {
         string selectQuery = "SELECT PasswordHash FROM Passwords WHERE Login = @login";
         SQLiteParameter[] selectParams = { new SQLiteParameter("@login", login) };
 
-        using (var reader = _dbManager.ExecuteReader(selectQuery, selectParams))
+        using (var reader = await _dbManager.ExecuteReaderAsync(selectQuery, selectParams))
         {
-          if (reader.Read())
+          if (await reader.ReadAsync())
           {
             string encryptedPassword = reader.GetString(0);
             return _encryptor.Decrypt(encryptedPassword);
@@ -82,7 +82,7 @@ namespace password_manager
     //метод изменения пароля по логину
     //отмечу, что для каждого логина может быть только одно значения пароля
     //(параметр Login - уникальный в нашей БД)
-    public void ChangePassword(string login, string newPassword)
+    public async Task ChangePasswordAsync(string login, string newPassword)
     {
       try
       {
@@ -93,7 +93,7 @@ namespace password_manager
           new SQLiteParameter("@login", login),
           new SQLiteParameter("@passwordHash", encryptedPassword)
         };
-        _dbManager.ExecuteQuery(updateQuery, updateParams);
+        await _dbManager.ExecuteQueryAsync(updateQuery, updateParams);
       }
       catch (Exception ex)
       {

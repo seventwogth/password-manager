@@ -34,28 +34,32 @@ namespace password_manager
       }
     }
 
-    public void ExecuteQuery(string query, SQLiteParameter[] parameters)
+    public async Task ExecuteQueryAsync(string query, SQLiteParameter[] parameters)
     {
       using (var connection = new SQLiteConnection(_connectionString))
       {
-        connection.Open();
-        using (var command = new SQLiteCommand(query, connection))
+        await connection.OpenAsync();
+        using (var transaction = await connection.BeginTransactionAsync())
         {
-          command.Parameters.AddRange(parameters);
-          command.ExecuteNonQuery();
+          using (var command = new SQLiteCommand(query, connection))
+          {
+            command.Parameters.AddRange(parameters);
+            await command.ExecuteNonQueryAsync();
+          }
+          await transaction.CommitAsync();
         }
       }
     }
 
-    public SQLiteDataReader ExecuteReader(string query, SQLiteParameter[] parameters)
+    public async Task<SQLiteDataReader> ExecuteReaderAsync(string query, SQLiteParameter[] parameters)
     {
       var connection = new SQLiteConnection(_connectionString);
-      connection.Open();
+      await connection.OpenAsync();
       try
       {
         var command = new SQLiteCommand(query, connection);
         command.Parameters.AddRange(parameters);
-        return command.ExecuteReader(CommandBehavior.CloseConnection);
+        return (SQLiteDataReader)await command.ExecuteReaderAsync();
       }
       catch
       {

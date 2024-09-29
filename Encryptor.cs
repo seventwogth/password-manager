@@ -7,19 +7,29 @@ namespace PManager.Cryptography
 {
   public class Encryptor
   {
-    private readonly string _secretKey;
+    private readonly byte[] _secretKey;
 
-    public Encryptor(string secretKey)
+    public Encryptor()
     {
-      _secretKey = secretKey;
+      _secretKey = getSecretKey(32);
+    }
+    
+    private byte[] getSecretKey(int size)
+    {
+      byte[] key = new byte[size];
+      using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+      {
+        rng.GetBytes(key);
+      }
+      return key;
     }
 
     public string Encrypt(string text)
     {
       using (Aes aes = Aes.Create())
       {
-        aes.Key = Encoding.UTF8.GetBytes(_secretKey);
-        aes.IV = aes.IV;
+        aes.Key = _secretKey;
+        aes.GenerateIV();
 
         ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
 
@@ -43,7 +53,7 @@ namespace PManager.Cryptography
       var fullCipher = Convert.FromBase64String(cryptedText);
       using (Aes aes = Aes.Create())
       {
-        aes.Key = Encoding.UTF8.GetBytes(_secretKey);
+        aes.Key = _secretKey;
 
         byte[] iv = new byte[aes.BlockSize / 8];
         byte[] cipher = new byte[fullCipher.Length - iv.Length];

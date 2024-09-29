@@ -5,18 +5,18 @@ namespace password_manager
 {
   public class AppManager
   {
-    private PasswordManager passwordManager;
-    private bool running;
-    private string masterPassword;
-    private Dictionary<string, Action> menuActions;
+    private readonly PasswordManager _passwordManager;
+    private readonly string _masterPassword;
+    private bool _running;
+    private readonly Dictionary<string, Action> _menuActions;
 
-    public AppManager(PasswordManager passwordM, string master)
+    public AppManager(PasswordManager passwordManager, string masterPassword)
     {
-      passwordManager = passwordM;
-      masterPassword = master;
-      running = false;
+      _passwordManager = passwordManager;
+      _masterPassword = masterPassword;
+      _running = false;
 
-      menuActions = new Dictionary<string, Action>
+      _menuActions = new Dictionary<string, Action>
       {
         { "1", SavePassword },
         { "2", FindPassword },
@@ -29,28 +29,28 @@ namespace password_manager
     {
       Console.WriteLine("Please insert master-password:");
       string response = Console.ReadLine();
-      if (response == masterPassword)
+      if (response == _masterPassword)
       {
-        running = true;
+        _running = true;
+        while (_running)
+        {
+          ShowMenu();
+          string choice = Console.ReadLine();
+          Console.WriteLine();
+
+          if (!string.IsNullOrEmpty(choice) && _menuActions.ContainsKey(choice))
+          {
+            _menuActions[choice].Invoke();
+          }
+          else
+          {
+            Console.WriteLine("\nInvalid option. Please choose an existing option.");
+          }
+        }
       }
       else
       {
-        Console.WriteLine("\nInvalid master-password!\nExiting the program...");
-      }
-      while (running)
-      {
-        ShowMenu();
-        string choice = Console.ReadLine();
-        Console.WriteLine();
-
-        if (!String.IsNullOrEmpty(choice) && menuActions.ContainsKey(choice))
-        {
-          menuActions[choice].Invoke();
-        }
-        else
-        {
-          Console.WriteLine("\nInvalid option. Please choose the existion option.");
-        }
+        Console.WriteLine("\nInvalid master-password! Exiting the program...");
       }
     }
 
@@ -69,33 +69,27 @@ namespace password_manager
       Console.WriteLine("Enter login:");
       string login = Console.ReadLine();
       Console.WriteLine();
-      if (!String.IsNullOrEmpty(login))
+      Console.WriteLine("Enter password:");
+      string password = Console.ReadLine();
+      Console.WriteLine();
+
+      if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
       {
-        Console.WriteLine("Enter password:");
-        string password = Console.ReadLine();
-        Console.WriteLine();
-        if (!String.IsNullOrEmpty(password))
-        {
-          passwordManager.SavePassword(login, password);
-        }
-        else
-        {
-          Console.WriteLine("\nPassword can't be null!");
-        }
+      _passwordManager.SavePassword(login, password);
       }
-      else 
+      else
       {
-        Console.WriteLine("\nLogin can't be null!");
+        Console.WriteLine("\nLogin and password can't be null!");
       }
     }
-    
+
     private void FindPassword()
     {
       Console.WriteLine("Enter login:");
       string login = Console.ReadLine();
-      if (!String.IsNullOrEmpty(login))
+      if (!string.IsNullOrEmpty(login))
       {
-        string password = passwordManager.FindPassword(login);
+        string password = _passwordManager.FindPassword(login);
         if (password != null)
         {
           Console.WriteLine($"\nPassword for login {login}: {password}");
@@ -105,7 +99,7 @@ namespace password_manager
           Console.WriteLine("\nPassword not found.");
         }
       }
-      else 
+      else
       {
         Console.WriteLine("\nLogin can't be null!");
       }
@@ -115,30 +109,22 @@ namespace password_manager
     {
       Console.WriteLine("Enter login:");
       string login = Console.ReadLine();
-      Console.WriteLine();
-      if (!String.IsNullOrEmpty(login))
+      Console.WriteLine("Enter new password:");
+      string newPassword = Console.ReadLine();
+
+      if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(newPassword))
       {
-        Console.WriteLine("Enter new password:");
-        string newPassword = Console.ReadLine();
-        Console.WriteLine();
-        if (!String.IsNullOrEmpty(newPassword))
-        {
-          passwordManager.ChangePassword(login, newPassword);
-        }
-        else
-        {
-          Console.WriteLine("Password can't be null!");
-        }
+        _passwordManager.ChangePassword(login, newPassword);
       }
       else
       {
-        Console.WriteLine("Login can't be null!");   
+        Console.WriteLine("\nLogin and password can't be null!");
       }
     }
 
     private void Exit()
     {
-      running = false;
+      _running = false;
       Console.WriteLine("Exiting...");
     }
   }

@@ -1,6 +1,6 @@
 using System;
 
-namespace password_manager
+namespace PManager.Core
 {
   public class DbException : Exception
   {

@@ -1,5 +1,8 @@
 using System;
-using password_manager;
+using PManager;
+using PManager.Core;
+using PManager.Cryptography;
+using PManager.Data;
 
 class Program
 {

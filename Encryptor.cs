@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace password_manager
+namespace PManager.Cryptography
 {
   public class Encryptor
   {

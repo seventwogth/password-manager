@@ -1,8 +1,9 @@
 using System;
 using System.Data.SQLite;
-
+using PManager.Cryptography;
+using PManager.Data;
 //Класс объекта - менеджера паролей, содержащий всю основную логику
-namespace password_manager
+namespace PManager.Core
 {
   public class PasswordManager
   {

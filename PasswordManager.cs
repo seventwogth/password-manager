@@ -16,8 +16,11 @@ namespace PManager.Core
       _encryptor = encryptor;
     }  
 
+    
     public async Task SavePasswordAsync(string login, string password)
     {
+      if (string.IsNullOrEmpty(login)) throw new ArgumentException("Login cannot be null or empty.", nameof(login)); 
+      if (string.IsNullOrEmpty(password)) throw new ArgumentException("Password cannot be null or empty.", nameof(password));
       try
       {
         string encryptedPassword = _encryptor.Encrypt(password);
@@ -27,6 +30,7 @@ namespace PManager.Core
 
         using (var reader = await _dbManager.ExecuteReaderAsync(checkExistQuery, checkParams))
         {
+          if (reader == null) throw new InvalidOperationException("Failed to execute query: reader isNull.");
           if (await reader.ReadAsync() && (long)reader[0] > 0)
           {
             string updateQuery = "UPDATE Passwords SET PasswordHash = @passwordHash WHERE Login = @login";
@@ -39,7 +43,8 @@ namespace PManager.Core
           }
           else
           {
-            string insertQuery = "INSERT INTO Passwords (Login, PasswordHash) VALUES (@login, @passwordHash)";
+            string insertQuery = 
+              "INSERT INTO Passwords (Login, PasswordHash) VALUES (@login, @passwordHash)";
             SQLiteParameter[] insertParams = 
             {
               new SQLiteParameter("@login", login),
@@ -51,9 +56,10 @@ namespace PManager.Core
       }
       catch (Exception ex)
       {
-        throw new DbException("Error occured saving password.", ex);
+      throw new DbException("Error occurred saving password.", ex);
       }
     }
+
     //метод поиска пароля по логину
     public async Task<string> FindPasswordAsync(string login)
     {

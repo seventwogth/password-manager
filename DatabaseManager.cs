@@ -39,14 +39,22 @@ namespace PManager.Data
       using (var connection = new SQLiteConnection(_connectionString))
       {
         await connection.OpenAsync();
-        using (var transaction = await connection.BeginTransactionAsync())
+        try
         {
-          using (var command = new SQLiteCommand(query, connection))
+          using (var transaction = await connection.BeginTransactionAsync())
           {
-            command.Parameters.AddRange(parameters);
-            await command.ExecuteNonQueryAsync();
+            using (var command = new SQLiteCommand(query, connection))
+            {
+              command.Parameters.AddRange(parameters);
+              await command.ExecuteNonQueryAsync();
+            }
+            await transaction.CommitAsync();
           }
-          await transaction.CommitAsync();
+        }
+        catch
+        {
+          await connection.CloseAsync();
+          throw;
         }
       }
     }
@@ -57,13 +65,15 @@ namespace PManager.Data
       await connection.OpenAsync();
       try
       {
-        var command = new SQLiteCommand(query, connection);
-        command.Parameters.AddRange(parameters);
-        return (SQLiteDataReader)await command.ExecuteReaderAsync();
+        using (var command = new SQLiteCommand(query, connection))
+        {
+          command.Parameters.AddRange(parameters);
+          return (SQLiteDataReader)await command.ExecuteReaderAsync();
+        }
       }
       catch
       {
-        connection.Close();
+        await connection.CloseAsync();
         throw;
       }
     }

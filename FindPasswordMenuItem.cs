@@ -5,9 +5,9 @@ namespace PManager.Core
 {
   public class FindPasswordMenuItem : MenuItem
   {
-    private readonly PasswordManager _passwordManager;
+    private readonly IPasswordManager _passwordManager;
 
-    public FindPasswordMenuItem(PasswordManager passwordManager)
+    public FindPasswordMenuItem(IPasswordManager passwordManager)
       : base("Find password by login")
     {
       _passwordManager = passwordManager;

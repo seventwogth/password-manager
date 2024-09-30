@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PManager.Cryptography
 {
-  public class Encryptor
+  public class Encryptor : IEncryptor
   {
     private readonly byte[] _secretKey;
 

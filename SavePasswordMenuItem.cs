@@ -5,9 +5,9 @@ namespace PManager.Core
 {
   public class SavePasswordMenuItem : MenuItem
   {
-    private readonly PasswordManager _passwordManager;
+    private readonly IPasswordManager _passwordManager;
 
-    public SavePasswordMenuItem(PasswordManager passwordManager)
+    public SavePasswordMenuItem(IPasswordManager passwordManager)
       : base("Save new password")
     {
       _passwordManager = passwordManager;

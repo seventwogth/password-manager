@@ -6,9 +6,9 @@ namespace PManager.Core
   public class ChangePasswordMenuItem : MenuItem
   {
 
-    private readonly PasswordManager _passwordManager;
+    private readonly IPasswordManager _passwordManager;
 
-    public ChangePasswordMenuItem(PasswordManager passwordManager)
+    public ChangePasswordMenuItem(IPasswordManager passwordManager)
       : base("Change password by login")
     {
       _passwordManager = passwordManager;

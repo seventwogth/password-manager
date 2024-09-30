@@ -3,23 +3,19 @@ using System.Data.SQLite;
 using PManager.Cryptography;
 using PManager.Data;
 
-//Класс объекта - менеджера паролей, содержащий всю основную логику
 namespace PManager.Core
 {
-  public class PasswordManager
+  public class PasswordManager : IPasswordManager
   {
-    private readonly DatabaseManager _dbManager; 
-    private readonly Encryptor _encryptor;
+    private readonly IDatabaseManager _dbManager; 
+    private readonly IEncryptor _encryptor;
     
-    //конструктора по умолчанию не будет (опять)
-    public PasswordManager(DatabaseManager dbManager, Encryptor encryptor)
+    public PasswordManager(IDatabaseManager dbManager, IEncryptor encryptor)
     {
       _dbManager = dbManager;
       _encryptor = encryptor;
     }  
-    // метод сохранения пароля в базу данных.
-    // во избежание ошибок, при добавлении уже существующих значений они обновляются.
-    // так как параметр Login является уникальным, БД не даст добавить два одинаковых значения
+
     public async Task SavePasswordAsync(string login, string password)
     {
       try

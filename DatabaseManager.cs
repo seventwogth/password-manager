@@ -4,7 +4,7 @@ using System.Data.SQLite;
 
 namespace PManager.Data
 {
-  public class DatabaseManager
+  public class DatabaseManager : IDatabaseManager
   {
     private readonly string _connectionString;
 

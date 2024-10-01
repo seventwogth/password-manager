@@ -65,7 +65,7 @@ namespace PManager.Core
       Console.WriteLine("Avaliable options:");
       for (int i = 0; i < _menuItems.Count; i++)
       {
-        Console.WriteLine($"{i + 1} - {_menuItems[i]._id}");
+        Console.WriteLine($"{i + 1} - {_menuItems[i].id}");
       }
       Console.WriteLine();
     }

@@ -5,11 +5,11 @@ namespace PManager.Core
 {
   public abstract class MenuItem
   {
-    public string _id { get; }
+    public string id { get; }
 
     protected MenuItem(string id)
     {
-      _id = id;
+      this.id = id;
     }
 
     public abstract Task ExecuteAsync();

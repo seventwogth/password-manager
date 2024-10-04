@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PManager.Data
+namespace PManager.Core
 {
   public interface IAppManager
   {

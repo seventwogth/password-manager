@@ -13,12 +13,12 @@ class Program
 {
   static async Task Main(string[] args)
   {    
-    var configuration = new ConfigurationBuilder()
-      .SetBasePath(AppContext.BaseDirectory)
-      .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-      .Build();
+//    var configuration = new ConfigurationBuilder()
+//      .SetBasePath(AppContext.BaseDirectory)
+//      .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+//      .Build();
 
-    string connectionString = configuration.GetConnectionString("DefaultConnection");
+    var connectionString = "Data Source=passwords.db";
 
     using (var dbContext = new DatabaseContext(connectionString))
     {

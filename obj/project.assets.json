@@ -406,6 +406,28 @@
           }
         }
       },
+      "NUnit/4.2.2": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/nunit.framework.dll": {
+            "related": ".legacy.xml;.xml"
+          },
+          "lib/net6.0/nunit.framework.legacy.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/nunit.framework.dll": {
+            "related": ".legacy.xml;.xml"
+          },
+          "lib/net6.0/nunit.framework.legacy.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/NUnit.props": {}
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -1327,6 +1349,31 @@
         "version.txt"
       ]
     },
+    "NUnit/4.2.2": {
+      "sha512": "mon0OPko28yZ/foVXrhiUvq1LReaGsBdziumyyYGxV/pOE4q92fuYeN+AF+gEU5pCjzykcdBt5l7xobTaiBjsg==",
+      "type": "package",
+      "path": "nunit/4.2.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "NOTICES.md",
+        "README.md",
+        "THIRD_PARTY_NOTICES.md",
+        "build/NUnit.props",
+        "icon.png",
+        "lib/net462/nunit.framework.dll",
+        "lib/net462/nunit.framework.legacy.dll",
+        "lib/net462/nunit.framework.legacy.xml",
+        "lib/net462/nunit.framework.xml",
+        "lib/net6.0/nunit.framework.dll",
+        "lib/net6.0/nunit.framework.legacy.dll",
+        "lib/net6.0/nunit.framework.legacy.xml",
+        "lib/net6.0/nunit.framework.xml",
+        "nunit.4.2.2.nupkg.sha512",
+        "nunit.nuspec"
+      ]
+    },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
       "sha512": "9kyFSIdN3T0qjDQ2R0HRXYIhS3l5psBzQi6qqhdLz+SzFyEy4sVxNOke+yyYv8Cu8rPER12c3RDjLT8wF3WBYQ==",
       "type": "package",
@@ -1930,6 +1977,7 @@
       "Microsoft.Extensions.Configuration >= 8.0.0",
       "Microsoft.Extensions.Configuration.Binder >= 8.0.2",
       "Microsoft.Extensions.Configuration.Json >= 8.0.1",
+      "NUnit >= 4.2.2",
       "System.Data.SQLite >= 1.0.118",
       "aes >= 1.0.0",
       "linq2db >= 5.4.1",
@@ -1993,6 +2041,10 @@
           "Microsoft.Extensions.Configuration.Json": {
             "target": "Package",
             "version": "[8.0.1, )"
+          },
+          "NUnit": {
+            "target": "Package",
+            "version": "[4.2.2, )"
           },
           "System.Data.SQLite": {
             "target": "Package",

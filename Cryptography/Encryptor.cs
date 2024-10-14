@@ -7,8 +7,8 @@ namespace PManager.Cryptography
 {
   public class Encryptor : IEncryptor
   {
-    private readonly byte[] _key; // ваш ключ шифрования
-    private readonly byte[] _iv; // ваш инициализационный вектор
+    private readonly byte[] _key;
+    private readonly byte[] _iv;
 
     public Encryptor(byte[] key, byte[] iv)
     {

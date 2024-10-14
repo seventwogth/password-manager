@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IMahkrFw3n5KQ78ApJQb292G/moF+az5QTRyQAwvf9wyOk5MFnaaigClzXphrFqdezXVf4cxQRBpAcUSHrqFBw==",
+  "dgSpecHash": "9rbQStWM3oafHf5Q5s8BfU2hLq6PN4yZM6PeIJwcJ+M4Z1Xq+S7eWt2+18BoWUrhh5Exe1OV6hFR6B8mvzQJrA==",
   "success": true,
   "projectFilePath": "C:\\Users\\stargazer\\GitHub\\password-manager\\PasswordManager.csproj",
   "expectedPackageFiles": [
@@ -26,7 +26,7 @@
     "C:\\Users\\stargazer\\.nuget\\packages\\microsoft.testplatform.testhost\\17.11.1\\microsoft.testplatform.testhost.17.11.1.nupkg.sha512",
     "C:\\Users\\stargazer\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\stargazer\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
-    "C:\\Users\\stargazer\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\stargazer\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\stargazer\\.nuget\\packages\\nunit\\4.2.2\\nunit.4.2.2.nupkg.sha512",
     "C:\\Users\\stargazer\\.nuget\\packages\\nunit3testadapter\\4.6.0\\nunit3testadapter.4.6.0.nupkg.sha512",
     "C:\\Users\\stargazer\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",

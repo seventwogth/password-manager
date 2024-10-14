@@ -13,11 +13,34 @@ namespace PManager.Data
 
     private void CreateDatabase()
     {
-//      if (!this.TableExists<PasswordEntity>())
-//      {
-      this.CreateTable<PasswordEntity>();
-//      }
+      try
+      {
+        var exists = this.GetTable<PasswordEntity>().Any();
+      }
+      catch (Exception ex)
+      {
+        if (ex.Message.Contains("no such table"))
+        {
+            try
+            {
+                Console.WriteLine("Creating table...");
+                this.CreateTable<PasswordEntity>();
+                Console.WriteLine("Table created.");
+            }
+            catch (Exception createEx)
+            {
+                Console.WriteLine($"Error creating table: {createEx.Message}");
+                throw;
+            }
+        }
+        else
+        {
+            throw;
+        }
+      }
     }
+
+
 
     public ITable<PasswordEntity> Passwords => this.GetTable<PasswordEntity>();
   }

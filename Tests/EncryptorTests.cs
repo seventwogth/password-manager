@@ -1,5 +1,6 @@
 using NUnit;
 using NUnit.Framework;
+using System.Security.Cryptography;
 using PManager.Cryptography;
 
 namespace PManager.Tests
@@ -9,11 +10,19 @@ namespace PManager.Tests
   {
 
     private Encryptor _encryptor;
+    private byte[] _key;
+    private byte[] _iv;
 
     [SetUp]
     public void Setup()
     {
-      _encryptor = new Encryptor();
+      
+      _key = new byte[32];
+      _iv = new byte[16];
+      RandomNumberGenerator.Fill(_key);
+      RandomNumberGenerator.Fill(_iv);
+
+      _encryptor = new Encryptor(_key, _iv);
     }
 
     [Test]

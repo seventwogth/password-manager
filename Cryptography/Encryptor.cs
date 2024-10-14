@@ -7,76 +7,56 @@ namespace PManager.Cryptography
 {
   public class Encryptor : IEncryptor
   {
-    private readonly byte[] _secretKey;
+    private readonly byte[] _key; // ваш ключ шифрования
+    private readonly byte[] _iv; // ваш инициализационный вектор
 
-    public Encryptor()
+    public Encryptor(byte[] key, byte[] iv)
     {
-      _secretKey = getSecretKey(32);
-    }
-    
-    private byte[] getSecretKey(int size)
-    {
-      byte[] key = new byte[size];
-      using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
-      {
-        rng.GetBytes(key);
-      }
-      return key;
+      _key = key;
+      _iv = iv;
     }
 
-    public string Encrypt(string text)
+    public string Encrypt(string plainText)
     {
-      using (Aes aes = Aes.Create())
+      using (var aes = Aes.Create())
       {
-        aes.Key = _secretKey;
-        aes.GenerateIV();
+        aes.Key = _key;
+        aes.IV = _iv;
 
-        ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-
-        using (MemoryStream ms = new MemoryStream())
+        var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+        using (var ms = new MemoryStream())
         {
-          ms.Write(aes.IV, 0, aes.IV.Length);
-          using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+          using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
           {
-            using (StreamWriter sw = new StreamWriter(cs))
+            using (var sw = new StreamWriter(cs))
             {
-              sw.Write(text);
+              sw.Write(plainText);
             }
+            return Convert.ToBase64String(ms.ToArray());
           }
-          return Convert.ToBase64String(ms.ToArray());
         }
       }
     }
 
-    public string Decrypt(string cryptedText)
+    public string Decrypt(string cipherText)
     {
-      var fullCipher = Convert.FromBase64String(cryptedText);
-      using (Aes aes = Aes.Create())
+      using (var aes = Aes.Create())
       {
-        aes.Key = _secretKey;
+        aes.Key = _key;
+        aes.IV = _iv;
 
-        byte[] iv = new byte[aes.BlockSize / 8];
-        byte[] cipher = new byte[fullCipher.Length - iv.Length];
-
-        Array.Copy(fullCipher, iv, iv.Length);
-        Array.Copy(fullCipher, iv.Length, cipher, 0, cipher.Length);
-
-        aes.IV = iv;
-
-        ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-
-        using (MemoryStream ms = new MemoryStream(cipher))
+        var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+        using (var ms = new MemoryStream(Convert.FromBase64String(cipherText)))
         {
-          using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+          using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
           {
-            using (StreamReader sr = new StreamReader(cs))
-              {
-                return sr.ReadToEnd();
-              }
+            using (var sr = new StreamReader(cs))
+            {
+              return sr.ReadToEnd();
+            }
           }
         }
       }
     }
   }
 }
-

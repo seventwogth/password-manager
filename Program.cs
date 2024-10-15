@@ -19,7 +19,7 @@ class Program
 //      .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 //      .Build();
 //  
-    string keyFilePath = "encryption_keys.json";
+    const string keyFilePath = "encryption_keys.json";
     EncryptionConfig encryptionConfig;
 
     if (File.Exists(keyFilePath))
@@ -35,7 +35,7 @@ class Program
     }
 
     IEncryptor encryptor = new Encryptor(encryptionConfig.Key, encryptionConfig.IV);
-    var connectionString = "Data Source=passwords.db";
+    const string connectionString = "Data Source=passwords.db";
 
     using (var dbContext = new DatabaseContext(connectionString))
     {

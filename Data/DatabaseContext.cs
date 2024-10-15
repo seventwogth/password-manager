@@ -1,3 +1,4 @@
+using System.Data.SQLite;
 using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.Mapping;
@@ -17,7 +18,7 @@ namespace PManager.Data
       {
         var exists = this.GetTable<PasswordEntity>().Any();
       }
-      catch (Exception ex)
+      catch (SQLiteException ex)
       {
         if (ex.Message.Contains("no such table"))
         {
@@ -27,7 +28,7 @@ namespace PManager.Data
                 this.CreateTable<PasswordEntity>();
                 Console.WriteLine("Table created.");
             }
-            catch (Exception createEx)
+            catch (SQLiteException createEx)
             {
                 Console.WriteLine($"Error creating table: {createEx.Message}");
                 throw;

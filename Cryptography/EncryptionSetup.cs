@@ -37,10 +37,10 @@ namespace PManager.Cryptography
       return JsonConvert.DeserializeObject<EncryptionConfig>(json);
     }
 
-    public static void SaveKey(string filePath, EncryptionConfig config)
-    {
-      var json = JsonConvert.SerializeObject(config);
-      File.WriteAllText(filePath, json);
-    }
+//    public static void SaveKey(string filePath, EncryptionConfig config)
+//    {
+//      var json = JsonConvert.SerializeObject(config);
+//      File.WriteAllText(filePath, json);
+//    }
   }
 }

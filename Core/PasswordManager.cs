@@ -1,4 +1,5 @@
 using System;
+using System.Data.SQLite;
 using LinqToDB;
 using PManager.Cryptography;
 using PManager.Data;
@@ -42,7 +43,7 @@ namespace PManager.Core
           await _context.InsertAsync(newPassword);
         }
       }
-      catch (Exception ex)
+      catch (SQLiteException ex)
       {
         throw new DbException("Error occurred saving password.", ex);
       }
@@ -60,7 +61,7 @@ namespace PManager.Core
         }
         return null;
       }
-      catch (Exception ex)
+      catch (SQLiteException ex)
       {
         throw new DbException("Error occured finding password.", ex);
       }
@@ -78,7 +79,7 @@ namespace PManager.Core
           await _context.UpdateAsync(passwordRecord);
         }
       }
-      catch (Exception ex)
+      catch (SQLiteException ex)
       {
         throw new DbException("Error occured changing password.", ex);
       }

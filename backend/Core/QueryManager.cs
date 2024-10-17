@@ -5,12 +5,12 @@ using PManager.Data;
 
 namespace PManager.Core
 {
-  public class PasswordManager : IPasswordManager
+  public class QueryManager : IQueryManager
   {
     private readonly IDatabaseContext _context; 
     private readonly IEncryptor _encryptor;
     
-    public PasswordManager(IDatabaseContext context, IEncryptor encryptor)
+    public QueryManager(IDatabaseContext context, IEncryptor encryptor)
     {
       _context = context;
       _encryptor = encryptor;

@@ -5,12 +5,12 @@ namespace PManager.Core
 {
   public class SavePasswordMenuItem : MenuItem
   {
-    private readonly IPasswordManager _passwordManager;
+    private readonly IQueryManager _qManager;
 
-    public SavePasswordMenuItem(IPasswordManager passwordManager)
+    public SavePasswordMenuItem(IQueryManager qManager)
       : base("Save new password")
     {
-      _passwordManager = passwordManager;
+      _qManager = qManager;
     }
 
     public override async Task ExecuteAsync()
@@ -24,7 +24,7 @@ namespace PManager.Core
 
       if (!String.IsNullOrEmpty(login) && !String.IsNullOrEmpty(password))
       {
-        await _passwordManager.SavePasswordAsync(login, password);
+        await _qManager.SavePasswordAsync(login, password);
         Console.WriteLine("Password saved successfully.");
         Console.WriteLine();
       }

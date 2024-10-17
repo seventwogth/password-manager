@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace PManager.Core
 {
-  public interface IPasswordManager
+  public interface IQueryManager
   {
     Task SavePasswordAsync(string login, string password);
 

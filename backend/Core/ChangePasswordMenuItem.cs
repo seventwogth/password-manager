@@ -6,12 +6,12 @@ namespace PManager.Core
   public class ChangePasswordMenuItem : MenuItem
   {
 
-    private readonly IPasswordManager _passwordManager;
+    private readonly IQueryManager _qManager;
 
-    public ChangePasswordMenuItem(IPasswordManager passwordManager)
+    public ChangePasswordMenuItem(IQueryManager qManager)
       : base("Change password by login")
     {
-      _passwordManager = passwordManager;
+      _qManager = qManager;
     }
 
     public override async Task ExecuteAsync()
@@ -25,7 +25,7 @@ namespace PManager.Core
 
       if (!String.IsNullOrEmpty(login) && !String.IsNullOrEmpty(newPassword))
       {
-        await _passwordManager.ChangePasswordAsync(login, newPassword);
+        await _qManager.ChangePasswordAsync(login, newPassword);
         Console.WriteLine("Password changed successfully.");
         Console.WriteLine();
       }

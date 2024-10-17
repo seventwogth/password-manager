@@ -5,12 +5,12 @@ namespace PManager.Core
 {
   public class FindPasswordMenuItem : MenuItem
   {
-    private readonly IPasswordManager _passwordManager;
+    private readonly IQueryManager _qManager;
 
-    public FindPasswordMenuItem(IPasswordManager passwordManager)
+    public FindPasswordMenuItem(IQueryManager qManager)
       : base("Find password by login")
     {
-      _passwordManager = passwordManager;
+      _qManager = qManager;
     }
 
     public override async Task ExecuteAsync()
@@ -21,7 +21,7 @@ namespace PManager.Core
 
       if (!String.IsNullOrEmpty(login))
       {
-        string password = await _passwordManager.FindPasswordAsync(login);
+        string password = await _qManager.FindPasswordAsync(login);
         if (!String.IsNullOrEmpty(password))
         {
           Console.WriteLine($"Password for '{login}' : {password}");

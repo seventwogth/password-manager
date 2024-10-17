@@ -39,7 +39,7 @@ class Program
 
     using (var dbContext = new DatabaseContext(connectionString))
     {
-      PasswordManager passwordManager = new PasswordManager(dbContext, encryptor);
+      QueryManager passwordManager = new QueryManager(dbContext, encryptor);
       AppManager appManager = new AppManager(passwordManager, "master");
 
       await appManager.StartAsync();

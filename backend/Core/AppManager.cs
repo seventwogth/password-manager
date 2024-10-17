@@ -10,14 +10,14 @@ namespace PManager.Core
     private readonly string _masterPassword;
     private bool _running;
 
-    public AppManager(IPasswordManager passwordManager, string masterPassword)
+    public AppManager(IQueryManager qManager, string masterPassword)
     {
       _masterPassword = masterPassword;
       _menuItems = new List<MenuItem>
       {
-        new SavePasswordMenuItem(passwordManager),
-        new FindPasswordMenuItem(passwordManager),
-        new ChangePasswordMenuItem(passwordManager),
+        new SavePasswordMenuItem(qManager),
+        new FindPasswordMenuItem(qManager),
+        new ChangePasswordMenuItem(qManager),
         new ExitMenuItem(this)
       };
     }

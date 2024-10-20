@@ -31,7 +31,7 @@ namespace PManager.Core
         {
           existingPassword.PasswordHash = encryptedPassword;
           await _context.UpdateAsync(existingPassword);
-        }
+        } 
         else
         {
           var newPassword = new PasswordEntity

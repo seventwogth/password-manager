@@ -8,8 +8,8 @@ namespace PManager.Tests
   [TestFixture]
   public class EncryptorTests
   {
-    private byte[] _key;
-    private byte[] _iv;
+    private byte[]? _key;
+    private byte[]? _iv;
     private Encryptor _encryptor;
 
     [SetUp]

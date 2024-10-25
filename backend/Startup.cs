@@ -4,25 +4,22 @@ using PManager.Core;
 using PManager.Data;
 using PManager.Cryptography;
 
-namespace PManager
+public class Startup
 {
-  public class Startup
+  public void ConfigureServices(IServiceCollection services)
   {
-    public void ConfigureServices(IServiceCollection services)
-    {
-      services.AddControllers();
-      services.AddScoped<IDatabaseContext, DatabaseContext>();
-      services.AddScoped<IQueryManager, QueryManager>();
-      services.AddScoped<IEncryptor, Encryptor>();
-    }
+    services.AddControllers();
+    services.AddScoped<IDatabaseContext, DatabaseContext>();
+    services.AddScoped<IQueryManager, QueryManager>();
+    services.AddScoped<IEncryptor, Encryptor>();
+  }
 
-    public void Configure(IApplicationBuilder app)
+  public void Configure(IApplicationBuilder app)
+  {
+    app.UseRouting();
+    app.UseEndpoints(endpoints =>
     {
-      app.UseRouting();
-      app.UseEndpoints(endpoints =>
-      {
-        endpoints.MapControllers();
-      });
-    }
+      endpoints.MapControllers();
+    });
   }
 }

@@ -74,7 +74,7 @@ namespace PManager.Core
                 if (passwordRecord != null)
                 {
                     passwordRecord.PasswordHash = _encryptor.Encrypt(newPassword);
-                    await _context.UpdateAsync(passwordRecord);
+                    await _context.UpdatePasswordAsync(passwordRecord);
                 }
             }
             catch (Exception ex)

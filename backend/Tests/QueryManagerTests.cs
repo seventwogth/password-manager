@@ -116,7 +116,6 @@ namespace PManager.Tests
             Assert.That(result, Is.EqualTo("Password does not exist."));
         }
 
-
         [Test]
         public async Task ChangePasswordAsync_ShouldChangePassword()
         {
@@ -128,6 +127,7 @@ namespace PManager.Tests
             var newPassword = "test2";
             var newEncryptedPassword = "e_test2";
 
+            // Настройка шифрования
             _encryptor.Setup(e => e.Encrypt(password)).Returns(encryptedPassword);
             _encryptor.Setup(e => e.Encrypt(newPassword)).Returns(newEncryptedPassword);
 
@@ -135,37 +135,31 @@ namespace PManager.Tests
             var mockPasswordData = new List<PasswordEntity> { passwordEntity }.AsQueryable();
             var mockTable = new Mock<ITable<PasswordEntity>>();
 
+            // Настройка мока для IQueryable
             mockTable.As<IQueryable<PasswordEntity>>().Setup(m => m.Provider).Returns(mockPasswordData.Provider);
             mockTable.As<IQueryable<PasswordEntity>>().Setup(m => m.Expression).Returns(mockPasswordData.Expression);
             mockTable.As<IQueryable<PasswordEntity>>().Setup(m => m.ElementType).Returns(mockPasswordData.ElementType);
             mockTable.As<IQueryable<PasswordEntity>>().Setup(m => m.GetEnumerator()).Returns(mockPasswordData.GetEnumerator());
 
+            // Настройка контекста
             _dbContext.Setup(db => db.Passwords).Returns(mockTable.Object);
 
-            _dbContext.Setup(db => db.UpdateAsync(
-                  It.IsAny<PasswordEntity>(),
-                  null,
-                  null,
-                  null,
-                  null,
-                  TableOptions.NotSet,
-                  default(CancellationToken)))
-                  .ReturnsAsync(1);
+            // Настройка вызова UpdatePasswordAsync
+            _dbContext.Setup(db => db.UpdatePasswordAsync(It.IsAny<PasswordEntity>()))
+                .Callback<PasswordEntity>(entity =>
+                {
+                    Assert.That(entity.Login, Is.EqualTo(login));
+                    Assert.That(entity.PasswordHash, Is.EqualTo(newEncryptedPassword));
+                })
+                .ReturnsAsync(1); // Возвращаем количество затронутых строк
 
             // Act
             await _queryManager.ChangePasswordAsync(login, newPassword);
 
             // Assert
-            _dbContext.Verify(db => db.UpdateAsync(
-                It.Is<PasswordEntity>(p => p.Login == login && p.PasswordHash == newEncryptedPassword),
-                null,
-                null,
-                null,
-                null,
-                TableOptions.NotSet,
-                default(CancellationToken)), Times.Once);
+            _dbContext.Verify(db => db.UpdatePasswordAsync(
+                It.Is<PasswordEntity>(p => p.Login == login && p.PasswordHash == newEncryptedPassword)), Times.Once);
         }
     }
-
 }
 

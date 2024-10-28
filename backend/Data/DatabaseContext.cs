@@ -45,5 +45,10 @@ namespace PManager.Data
         {
             return await this.InsertAsync(entity);
         }
+
+        public async Task<int> UpdatePasswordAsync(PasswordEntity entity)
+        {
+            return await this.UpdateAsync(entity);
+        }
     }
 }

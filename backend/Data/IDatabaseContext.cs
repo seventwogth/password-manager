@@ -7,6 +7,8 @@ namespace PManager.Data
 
         Task<int> InsertPasswordAsync(PasswordEntity entity);
 
+        Task<int> UpdatePasswordAsync(PasswordEntity entity);
+
     }
 }
 

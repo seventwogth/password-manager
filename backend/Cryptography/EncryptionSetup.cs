@@ -6,41 +6,41 @@ using Newtonsoft.Json;
 
 namespace PManager.Cryptography
 {
-  public class EncryptionSetup
-  {
-    public static void GenerateAndSaveKey(string path)
+    public class EncryptionSetup
     {
-      using (var aes = Aes.Create())
-      {
-        aes.GenerateKey();
-        aes.GenerateIV();
-
-        var config = new EncryptionConfig
+        public static void GenerateAndSaveKey(string path)
         {
-          Key = aes.Key,
-          IV = aes.IV
-        };
+            using (var aes = Aes.Create())
+            {
+                aes.GenerateKey();
+                aes.GenerateIV();
 
-        var json = JsonConvert.SerializeObject(config);
-        File.WriteAllText(path, json);
-      }
+                var config = new EncryptionConfig
+                {
+                    Key = aes.Key,
+                    IV = aes.IV
+                };
+
+                var json = JsonConvert.SerializeObject(config);
+                File.WriteAllText(path, json);
+            }
+        }
+
+        public static EncryptionConfig LoadKey(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException($"Configuration file not found: {filePath}");
+            }
+
+            var json = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<EncryptionConfig>(json);
+        }
+
+        public static void SaveKey(string filePath, EncryptionConfig config)
+        {
+            var json = JsonConvert.SerializeObject(config);
+            File.WriteAllText(filePath, json);
+        }
     }
-
-    public static EncryptionConfig LoadKey(string filePath)
-    {
-      if (!File.Exists(filePath))
-      {
-        throw new FileNotFoundException($"Configuration file not found: {filePath}");
-      }
-
-      var json = File.ReadAllText(filePath);
-      return JsonConvert.DeserializeObject<EncryptionConfig>(json);
-    }
-
-    public static void SaveKey(string filePath, EncryptionConfig config)
-    {
-      var json = JsonConvert.SerializeObject(config);
-      File.WriteAllText(filePath, json);
-    }
-  }
 }

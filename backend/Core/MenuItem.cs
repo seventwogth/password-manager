@@ -1,17 +1,14 @@
-using System;
-using System.Threading.Tasks;
-
 namespace PManager.Core
 {
-  public abstract class MenuItem
-  {
-    public string id { get; }
-
-    protected MenuItem(string id)
+    public abstract class MenuItem
     {
-      this.id = id;
-    }
+        public string id { get; }
 
-    public abstract Task ExecuteAsync();
-  }
+        protected MenuItem(string id)
+        {
+            this.id = id;
+        }
+
+        public abstract Task ExecuteAsync();
+    }
 }

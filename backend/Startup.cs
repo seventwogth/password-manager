@@ -6,23 +6,23 @@ using PManager.Cryptography;
 
 namespace PManager
 {
-  public class Startup
-  {
-    public void ConfigureServices(IServiceCollection services)
+    public class Startup
     {
-      services.AddControllers();
-      services.AddScoped<IDatabaseContext, DatabaseContext>();
-      services.AddScoped<IQueryManager, QueryManager>();
-      services.AddScoped<IEncryptor, Encryptor>();
-    }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+            services.AddScoped<IDatabaseContext, DatabaseContext>();
+            services.AddScoped<IQueryManager, QueryManager>();
+            services.AddScoped<IEncryptor, Encryptor>();
+        }
 
-    public void Configure(IApplicationBuilder app)
-    {
-      app.UseRouting();
-      app.UseEndpoints(endpoints =>
-      {
-        endpoints.MapControllers();
-      });
+        public void Configure(IApplicationBuilder app)
+        {
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
     }
-  }
 }

@@ -1,47 +1,49 @@
 using LinqToDB;
 using LinqToDB.Data;
-using LinqToDB.Mapping;
 
 namespace PManager.Data
 {
-  public class DatabaseContext : DataConnection, IDatabaseContext
-  {
-    public DatabaseContext(string connectionString) : base(ProviderName.SQLiteClassic, connectionString)
+    public class DatabaseContext : DataConnection, IDatabaseContext
     {
-      CreateDatabase();
-    }
+        public DatabaseContext(string connectionString) : base(ProviderName.SQLiteClassic, connectionString)
+        {
+            CreateDatabase();
+        }
 
-    private void CreateDatabase()
-    {
-      try
-      {
-        var exists = this.GetTable<PasswordEntity>().Any();
-      }
-      catch (Exception ex)
-      {
-        if (ex.Message.Contains("no such table"))
+        private void CreateDatabase()
         {
             try
             {
-                Console.WriteLine("Creating table...");
-                this.CreateTable<PasswordEntity>();
-                Console.WriteLine("Table created.");
+                var exists = this.GetTable<PasswordEntity>().Any();
             }
-            catch (Exception createEx)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Error creating table: {createEx.Message}");
-                throw;
+                if (ex.Message.Contains("no such table"))
+                {
+                    try
+                    {
+                        Console.WriteLine("Creating table...");
+                        this.CreateTable<PasswordEntity>();
+                        Console.WriteLine("Table created.");
+                    }
+                    catch (Exception createEx)
+                    {
+                        Console.WriteLine($"Error creating table: {createEx.Message}");
+                        throw;
+                    }
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
-        else
+        public ITable<PasswordEntity> Passwords => this.GetTable<PasswordEntity>();
+
+
+        public async Task<int> InsertPasswordAsync(PasswordEntity entity)
         {
-            throw;
+            return await this.InsertAsync(entity);
         }
-      }
     }
-
-
-
-    public ITable<PasswordEntity> Passwords => this.GetTable<PasswordEntity>();
-  }
 }

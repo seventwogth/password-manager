@@ -25,7 +25,7 @@ namespace PManager.Tests
 
 
         [Test]
-        public async Task SavePassword_ShouldSaveNewPassword_WhenLoginIsNew()
+        public async Task SavePasswordAsync_ShouldSaveNewPassword()
         {
             // Arrange
             var login = "test";
@@ -127,7 +127,6 @@ namespace PManager.Tests
             var newPassword = "test2";
             var newEncryptedPassword = "e_test2";
 
-            // Настройка шифрования
             _encryptor.Setup(e => e.Encrypt(password)).Returns(encryptedPassword);
             _encryptor.Setup(e => e.Encrypt(newPassword)).Returns(newEncryptedPassword);
 
@@ -135,23 +134,20 @@ namespace PManager.Tests
             var mockPasswordData = new List<PasswordEntity> { passwordEntity }.AsQueryable();
             var mockTable = new Mock<ITable<PasswordEntity>>();
 
-            // Настройка мока для IQueryable
             mockTable.As<IQueryable<PasswordEntity>>().Setup(m => m.Provider).Returns(mockPasswordData.Provider);
             mockTable.As<IQueryable<PasswordEntity>>().Setup(m => m.Expression).Returns(mockPasswordData.Expression);
             mockTable.As<IQueryable<PasswordEntity>>().Setup(m => m.ElementType).Returns(mockPasswordData.ElementType);
             mockTable.As<IQueryable<PasswordEntity>>().Setup(m => m.GetEnumerator()).Returns(mockPasswordData.GetEnumerator());
 
-            // Настройка контекста
             _dbContext.Setup(db => db.Passwords).Returns(mockTable.Object);
 
-            // Настройка вызова UpdatePasswordAsync
             _dbContext.Setup(db => db.UpdatePasswordAsync(It.IsAny<PasswordEntity>()))
                 .Callback<PasswordEntity>(entity =>
                 {
                     Assert.That(entity.Login, Is.EqualTo(login));
                     Assert.That(entity.PasswordHash, Is.EqualTo(newEncryptedPassword));
                 })
-                .ReturnsAsync(1); // Возвращаем количество затронутых строк
+                .ReturnsAsync(1);
 
             // Act
             await _queryManager.ChangePasswordAsync(login, newPassword);

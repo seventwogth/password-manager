@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Moq;
 using PManager.Data;
-using PManager.Cryptography;
+using PManager.Cryptography.Interfaces;
 
 namespace PManager.Tests
 {

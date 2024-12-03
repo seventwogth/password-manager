@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using PManager.Cryptography;
+using PManager.Cryptography.Services;
 using System;
 using System.Security.Cryptography;
 

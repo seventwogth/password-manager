@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PManager.Core;
+using PManager.Core.Services;
+using PManager.Core.Interfaces;
 
 namespace PManager.API
 {

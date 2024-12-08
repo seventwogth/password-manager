@@ -3,6 +3,7 @@ using PManager.Cryptography.Interfaces;
 using PManager.Core.Exceptions;
 using PManager.Data;
 using PManager.Core.Interfaces;
+using PManager.API;
 
 namespace PManager.Core.Services
 {
@@ -30,7 +31,7 @@ namespace PManager.Core.Services
 
                 if (existingPassword != null)
                 {
-                    existingPassword.PasswordHash = encryptedPassword;
+                    existingPassword.Password = encryptedPassword;
                     await _context.UpdateAsync(existingPassword);
                 }
                 else
@@ -38,7 +39,7 @@ namespace PManager.Core.Services
                     var newPassword = new PasswordEntity
                     {
                         Login = login,
-                        PasswordHash = encryptedPassword
+                        Password = encryptedPassword
                     };
                     await _context.InsertAsync(newPassword);
                 }
@@ -57,13 +58,13 @@ namespace PManager.Core.Services
 
                 if (passwordRecord != null)
                 {
-                    return _encryptor.Decrypt(passwordRecord.PasswordHash);
+                    return _encryptor.Decrypt(passwordRecord.Password);
                 }
                 return null;
             }
             catch (Exception ex)
             {
-                throw new DbException("Error occured finding password.", ex);
+                throw new DbException("Error occured retrieving password.", ex);
             }
         }
 
@@ -75,7 +76,7 @@ namespace PManager.Core.Services
 
                 if (passwordRecord != null)
                 {
-                    passwordRecord.PasswordHash = _encryptor.Encrypt(newPassword);
+                    passwordRecord.Password = _encryptor.Encrypt(newPassword);
                     await _context.UpdateAsync(passwordRecord);
                 }
             }
@@ -84,5 +85,26 @@ namespace PManager.Core.Services
                 throw new DbException("Error occured changing password.", ex);
             }
         }
+
+        public async Task<List<PasswordModel>> GetAllPasswordsAsync()
+        {
+            try
+            {
+                var passwords = await _context.Passwords.ToListAsync();
+
+                return passwords
+                    .Select(p => new PasswordModel
+                    {
+                        Login = p.Login,
+                        Password = _encryptor.Decrypt(p.Password)
+                    })
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DbException("Error occurred retrieving all passwords.", ex);
+            }
+        }
+
     }
 }

@@ -1,3 +1,5 @@
+using PManager.API;
+
 namespace PManager.Core.Interfaces
 {
     public interface IQueryManager
@@ -7,5 +9,7 @@ namespace PManager.Core.Interfaces
         Task<string> FindPasswordAsync(string login);
 
         Task ChangePasswordAsync(string login, string newPassword);
+
+        Task<List<PasswordModel>> GetAllPasswordsAsync();
     }
 }

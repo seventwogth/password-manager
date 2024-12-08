@@ -7,7 +7,7 @@ using PManager.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IDatabaseContext>(provider =>
-    new DatabaseContext("YourConnectionStringHere"));
+    new DatabaseContext("Data Source=passwords.db"));
 builder.Services.AddScoped<IQueryManager, QueryManager>();
 
 var encryptionSettings = builder.Configuration.GetSection("EncryptionSettings");

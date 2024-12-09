@@ -3,7 +3,7 @@ using PManager.Cryptography.Interfaces;
 using PManager.Core.Exceptions;
 using PManager.Data;
 using PManager.Core.Interfaces;
-using PManager.API;
+using PManager.API.Models;
 
 namespace PManager.Core.Services
 {

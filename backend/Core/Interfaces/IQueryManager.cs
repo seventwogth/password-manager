@@ -1,4 +1,4 @@
-using PManager.API;
+using PManager.API.Models;
 
 namespace PManager.Core.Interfaces
 {
